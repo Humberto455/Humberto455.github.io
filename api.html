@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="https://ih1.redbubble.net/image.975605771.0553/st,small,845x845-pad,1000x1000,f8f8f8.jpg">
+  <title>Rick and Morty Characters</title>
+  <style>
+    /* Estilos para la tarjeta */
+    .tarjeta {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 10px;
+      padding: 10px;
+      width: 200px;
+      text-align: center;
+    }
+
+    .contenedor-tarjetas {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Rick and Morty Characters</h1>
+
+  <button id="agregarBtn">Agregar Personaje</button>
+  <button id="limpiarBtn">Borrar Todo</button>
+
+  <div id="listaPersonajes" class="contenedor-tarjetas"></div>
+
+  <script>
+    document.getElementById('agregarBtn').addEventListener('click', agregarPersonaje);
+    document.getElementById('limpiarBtn').addEventListener('click', limpiarLista);
+
+    let contador = 0; // Variable importante para hacer consecutivo el array de personaje
+
+    function agregarPersonaje() {
+      fetch('https://rickandmortyapi.com/api/character/')
+        .then(response => response.json())
+        .then(data => {
+          const personaje = data.results[contador++];
+          const contenedor = document.querySelector('#listaPersonajes');
+
+          const tarjeta = document.createElement('div');
+          tarjeta.classList.add('tarjeta');
+
+          tarjeta.innerHTML = `
+            <img src="${personaje.image}" alt="${personaje.name}" style="max-width: 100%;">
+            <h3>${personaje.name}</h3>
+            <p>Id: ${personaje.id}</p>
+            <p>Estado: ${personaje.status}</p>
+            <p>Origen: ${personaje.origin.name}</p>
+            <p>Cantidad de Episodios: ${personaje.episode.length}</p>
+          `;
+
+          contenedor.appendChild(tarjeta);
+        })
+        .catch(error => console.error('Error al obtener personaje:', error));
+    }
+
+    function limpiarLista() {
+      const contenedor = document.querySelector('#listaPersonajes');
+      contenedor.innerHTML = '';
+      contador = 0;
+    }
+  </script>
+
+</body>
+</html>
