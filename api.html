@@ -4,17 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="https://ih1.redbubble.net/image.975605771.0553/st,small,845x845-pad,1000x1000,f8f8f8.jpg">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <title>Rick and Morty Characters</title>
   <style>
     /* Estilos para la tarjeta */
-    .tarjeta {
+    /* .tarjeta {
       border: 1px solid #ccc;
       border-radius: 8px;
       margin: 10px;
       padding: 10px;
       width: 200px;
       text-align: center;
-    }
+    } */
 
     .contenedor-tarjetas {
       display: flex;
@@ -32,6 +33,22 @@
 
   <div id="listaPersonajes" class="contenedor-tarjetas"></div>
 
+
+  <!-- Aqui abajo esta la plantilla creada con boostrap 5 y la etiqueta Template -->
+
+  <template id="tarjeta">
+    <div class="card" style="width: 18rem;">
+      <img src="..." class="card-img-top" alt="..." data-id="image">
+      <div class="card-body">
+        <p class="card-text" data-id="id"></p>
+        <p class="card-text" data-id="name"></p>
+        <p class="card-text" data-id="status"></p>
+        <p class="card-text" data-id="origin"></p>
+        <p class="card-text" data-id="episodes"></p>
+      </div>
+    </div>
+  </template>
+
   <script>
     document.getElementById('agregarBtn').addEventListener('click', agregarPersonaje);
     document.getElementById('limpiarBtn').addEventListener('click', limpiarLista);
@@ -44,20 +61,30 @@
         .then(data => {
           const personaje = data.results[contador++];
           const contenedor = document.querySelector('#listaPersonajes');
+          const template = document.querySelector('#tarjeta');
 
-          const tarjeta = document.createElement('div');
-          tarjeta.classList.add('tarjeta');
+          var clone = template.content.cloneNode(true);
 
-          tarjeta.innerHTML = `
-            <img src="${personaje.image}" alt="${personaje.name}" style="max-width: 100%;">
-            <h3>${personaje.name}</h3>
-            <p>Id: ${personaje.id}</p>
-            <p>Estado: ${personaje.status}</p>
-            <p>Origen: ${personaje.origin.name}</p>
-            <p>Cantidad de Episodios: ${personaje.episode.length}</p>
-          `;
+          clone.querySelector("[data-id='image']").src = personaje.image;
+          clone.querySelector("[data-id='id']").textContent ="Id: " + personaje.id;
+          clone.querySelector("[data-id='name']").textContent ="Name: " + personaje.name;
+          clone.querySelector("[data-id='status']").textContent ="Status: " + personaje.status;
+          clone.querySelector("[data-id='origin']").textContent ="Origin: " + personaje.origin.name;
+          clone.querySelector("[data-id='episodes']").textContent ="Number of episodes: " + personaje.episode.length;
 
-          contenedor.appendChild(tarjeta);
+          // const tarjeta = document.createElement('div');
+          // tarjeta.classList.add('tarjeta');
+
+          // tarjeta.innerHTML = `
+          //   <img src="${personaje.image}" alt="${personaje.name}" style="max-width: 100%;">
+          //   <h3>${personaje.name}</h3>
+          //   <p>Id: ${personaje.id}</p>
+          //   <p>Estado: ${personaje.status}</p>
+          //   <p>Origen: ${personaje.origin.name}</p>
+          //   <p>Cantidad de Episodios: ${personaje.episode.length}</p>
+          // `;
+
+          contenedor.appendChild(clone);
         })
         .catch(error => console.error('Error al obtener personaje:', error));
     }
