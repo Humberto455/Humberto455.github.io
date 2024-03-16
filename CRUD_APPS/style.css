@@ -1,0 +1,20 @@
+.Titulo{
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+#logo{
+    height: 260px;
+    width: 260px;
+}
+
+#img_container{
+    text-align: center;
+    display: block;
+}
+
+#cerrar{
+    display: block;
+    margin-left: 100px;
+}
